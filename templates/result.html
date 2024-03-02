@@ -1,0 +1,22 @@
+<!-- result.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Page</title>
+</head>
+<body>
+
+{% for result in hed_list %}
+    <div>
+        <p>File Name: {{ result.file_name }}</p>
+        <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" style="width: 25%; height: inherit;">
+        <img src="data:image/png;base64,{{ result.edge_result }}" alt="Edge Result" style="width: 25%; height: inherit;">
+    </div>
+{% endfor %}
+
+</body>
+</html>
