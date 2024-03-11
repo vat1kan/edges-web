@@ -6,17 +6,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result Page</title>
+    <title>Result</title>
 </head>
 <body>
-
-{% for result in hed_list %}
-    <div>
-        <p>File Name: {{ result.file_name }}</p>
-        <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" style="width: 25%; height: inherit;">
-        <img src="data:image/png;base64,{{ result.edge_result }}" alt="Edge Result" style="width: 25%; height: inherit;">
-    </div>
-{% endfor %}
-
+    <h1>Result</h1>
+    {% for hed_entry in hed_list %}
+        <div>
+            <p>File Name: {{ hed_entry.file_name }}</p>
+            <img src="data:image/png;base64,{{ hed_entry.original_image }}" alt="Original Image">
+            <img src="data:image/png;base64,{{ hed_entry.edge_result }}" alt="HED Edges">
+            
+            {% if 'metrics' in hed_entry %}
+                <p>Metrics:</p>
+                <ul>
+                    <li>Recall: {{ hed_entry.metrics.recall }}</li>
+                    <li>Precision: {{ hed_entry.metrics.precision }}</li>
+                    <li>F1: {{ hed_entry.metrics.f1 }}</li>
+                    <li>FOM: {{ hed_entry.metrics.fom }}</li>
+                </ul>
+            {% endif %}
+        </div>
+        <hr>
+    {% endfor %}
 </body>
 </html>
