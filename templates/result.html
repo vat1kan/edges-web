@@ -1,5 +1,3 @@
-<!-- result.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,22 +7,20 @@
     <title>Result</title>
 </head>
 <body>
-    <h1>Result</h1>
-    {% for hed_entry in hed_list %}
+    <h1>Results</h1>
+    {% for result in results %}
         <div>
-            <p>File Name: {{ hed_entry.file_name }}</p>
-            <img src="data:image/png;base64,{{ hed_entry.original_image }}" alt="Original Image">
-            <img src="data:image/png;base64,{{ hed_entry.edge_result }}" alt="HED Edges">
-            
-            {% if 'metrics' in hed_entry %}
-                <p>Metrics:</p>
-                <ul>
-                    <li>Recall: {{ hed_entry.metrics.recall }}</li>
-                    <li>Precision: {{ hed_entry.metrics.precision }}</li>
-                    <li>F1: {{ hed_entry.metrics.f1 }}</li>
-                    <li>FOM: {{ hed_entry.metrics.fom }}</li>
-                </ul>
-            {% endif %}
+            <p>File Name: {{ result.filename }}</p>
+            <div style="display: flex;">
+                <div style="margin-right: 20px;">
+                    <p>Original Image:</p>
+                    <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image">
+                </div>
+                <div>
+                    <p>PiDiNet Edges:</p>
+                    <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image">
+                </div>
+            </div>
         </div>
         <hr>
     {% endfor %}
