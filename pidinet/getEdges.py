@@ -20,16 +20,14 @@ from io import BytesIO
 parser = argparse.ArgumentParser(description='PyTorch Pixel Difference Convolutional Networks')
 args = parser.parse_args()
 
-def PiDiNet(uploaded_file):
+def PiDiNet(image_data,image):
     global args
     model = getattr(models, 'pidinet_converted')(args)
-    
-    # Check if an image is uploaded
-    if uploaded_file.filename == '':
-        print("No image uploaded.")
-        return None
-    image_data = uploaded_file.read()
-    image = Image.open(BytesIO(image_data)).convert('RGB')
+    # if uploaded_file.filename == '':
+    #     print("No image uploaded.")
+    #     return None
+    # image_data = uploaded_file.read()
+    # image = Image.open(BytesIO(image_data)).convert('RGB')
 
     checkpoint = load_checkpoint(args, BytesIO(image_data))
     if checkpoint is None:
