@@ -23,11 +23,6 @@ args = parser.parse_args()
 def PiDiNet(image_data,image):
     global args
     model = getattr(models, 'pidinet_converted')(args)
-    # if uploaded_file.filename == '':
-    #     print("No image uploaded.")
-    #     return None
-    # image_data = uploaded_file.read()
-    # image = Image.open(BytesIO(image_data)).convert('RGB')
 
     checkpoint = load_checkpoint(args, BytesIO(image_data))
     if checkpoint is None:
@@ -35,7 +30,8 @@ def PiDiNet(image_data,image):
         return None
     model.load_state_dict(convert_pidinet(checkpoint['state_dict'], 'carv4'))
     
-    return get_base64_image(test(model, image))
+    #return get_base64_image(test(model, image))
+    return test(model, image)
 
 def test(model, image):
     model.eval()
@@ -58,8 +54,8 @@ def test(model, image):
     result_image = Image.fromarray((result * 255).astype(np.uint8))
     return result_image
 
-def get_base64_image(image):
-    buffered = BytesIO()
-    image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    return img_str
+# def get_base64_image(image):
+#     buffered = BytesIO()
+#     image.save(buffered, format="PNG")
+#     img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+#     return img_str

@@ -9,20 +9,31 @@
 <body>
     <h1>Results</h1>
     {% for result in results %}
-        <div>
-            <p>File Name: {{ result.filename }}</p>
-            <div style="display: flex;">
-                <div style="margin-right: 20px;">
-                    <p>Original Image:</p>
-                    <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image">
-                </div>
-                <div>
-                    <p>PiDiNet Edges:</p>
-                    <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image">
-                </div>
+    <div>
+        <p>File Name: {{ result.filename }}</p>
+        <div style="display: flex;">
+            <div style="margin-right: 40px;">
+                <p>Original Image</p>
+                <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image">
+            </div>
+            {% if result.metrics %}
+            <div>
+                <p>Metrics:</p>
+                <ul>
+                    <li>Recall: {{ result.metrics.recall }}</li>
+                    <li>Precision: {{ result.metrics.precision }}</li>
+                    <li>F1 Score: {{ result.metrics.f1_score }}</li>
+                    <li>FOM: {{ result.metrics.FOM }}</li>
+                </ul>
+            </div>
+            {% endif %}
+            <div style="margin-left: 40px;">
+                <p>Edges</p>
+                <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image">
             </div>
         </div>
-        <hr>
-    {% endfor %}
+    </div>
+    <hr>
+{% endfor %}
 </body>
 </html>
