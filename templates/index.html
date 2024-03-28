@@ -9,25 +9,55 @@
         function toggleNoiseFields() {
             var checkbox = document.getElementById("noise_check");
             var noiseFields = document.getElementById("noise_fields");
-
+            var noiseType = document.getElementById("noise_type").value;
+            var noiseParameterInput = document.getElementById("noise_parameter");
+    
             if (checkbox.checked) {
                 noiseFields.style.display = "block";
+                if (noiseType === "gauss") {
+                    noiseParameterInput.setAttribute("min", "0");
+                    noiseParameterInput.setAttribute("max", "100");
+                    noiseParameterInput.setAttribute("step", "5");
+                } else {
+                    noiseParameterInput.setAttribute("min", "0");
+                    noiseParameterInput.setAttribute("max", "1");
+                    noiseParameterInput.setAttribute("step", "0.05");
+                }
             } else {
                 noiseFields.style.display = "none";
             }
         }
-
+    
         function toggleGroundTruthField() {
-            var metrics_check = document.getElementById("calculate_metrics");
+            var metricsCheck = document.getElementById("calculate_metrics");
             var metricsFields = document.getElementById('metrics_fields');
-
-            if (metrics_check.checked) {
+            var groundTruthInput = document.getElementsByName("ground_truth")[0];
+    
+            if (metricsCheck.checked) {
                 metricsFields.style.display = 'block';
+                groundTruthInput.required = true; // Make ground truth input required
             } else {
                 metricsFields.style.display = 'none';
+                groundTruthInput.required = false; // Make ground truth input not required
             }
-        };
-
+        }
+    
+        function validateForm() {
+            var metricsCheck = document.getElementById("calculate_metrics");
+    
+            if (metricsCheck.checked) {
+                var mainFiles = document.getElementsByName("file")[0].files;
+                var groundTruthFiles = document.getElementsByName("ground_truth")[0].files;
+    
+                if (mainFiles.length !== groundTruthFiles.length) {
+                    alert("Number of main files must match number of ground truth files.");
+                    return false;
+                }
+            }
+    
+            return true;
+        }
+    
         // Trigger toggleGroundTruthField() initially
         window.addEventListener('load', function() {
             toggleGroundTruthField();
@@ -36,7 +66,7 @@
 </head>
 <body>
     <h1>Upload Images</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
         <input type="file" name="file" accept=".jpg, .jpeg, .png" multiple>
         <br>
         <label for="noise_check">Add Noise:</label>
@@ -51,7 +81,7 @@
             </select>
             <br>
             <label for="noise_parameter">Noise Parameter:</label>
-            <input type="number" step="0.05" name="noise_parameter" id="noise_parameter">
+            <input type="number" step="0.05" name="noise_parameter" id="noise_parameter" min="0" max="100">
             <br>
         </div>
         <label for="calculate_metrics">Calculate Metrics:</label>
