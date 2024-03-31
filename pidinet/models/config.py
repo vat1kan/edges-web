@@ -262,7 +262,7 @@ def config_model(model):
     assert model in model_options, \
         'unrecognized model, please choose from %s' % str(model_options)
 
-    print(str(nets[model]))
+    #print(str(nets[model]))
 
     pdcs = []
     for i in range(16):
@@ -277,7 +277,7 @@ def config_model_converted(model):
     assert model in model_options, \
         'unrecognized model, please choose from %s' % str(model_options)
 
-    print(str(nets[model]))
+    #print(str(nets[model]))
 
     pdcs = []
     for i in range(16):

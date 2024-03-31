@@ -35,34 +35,59 @@
     
             if (metricsCheck.checked) {
                 metricsFields.style.display = 'block';
-                groundTruthInput.required = true; // Make ground truth input required
+                groundTruthInput.required = true
             } else {
                 metricsFields.style.display = 'none';
-                groundTruthInput.required = false; // Make ground truth input not required
+                groundTruthInput.required = false;
             }
         }
     
         function validateForm() {
             var metricsCheck = document.getElementById("calculate_metrics");
+            var mainFilesInput = document.getElementsByName("file")[0];
+            var mainFiles = mainFilesInput.files;
     
-            if (metricsCheck.checked) {
-                var mainFiles = document.getElementsByName("file")[0].files;
-                var groundTruthFiles = document.getElementsByName("ground_truth")[0].files;
+            if (mainFiles.length === 0) {
+                alert("Please upload at least one image.");
+                return false;
+            }
     
-                if (mainFiles.length !== groundTruthFiles.length) {
-                    alert("Number of main files must match number of ground truth files.");
+            if (mainFiles.length > 30) {
+                alert("You can upload at most 30 images.");
+                return false;
+            }
+    
+            // Check image size
+            for (var i = 0; i < mainFiles.length; i++) {
+                if (mainFiles[i].size > 5 * 1024 * 1024) {
+                    alert("Image size should be less than 5 MB.");
                     return false;
                 }
             }
     
-            return true;
+            if (metricsCheck.checked) {
+                var groundTruthFiles = document.getElementsByName("ground_truth")[0].files;
+    
+                if (mainFiles.length !== groundTruthFiles.length) {
+                    alert("Number of original images must match number of ground truth images.");
+                    return false;
+                }
+    
+                return true;
+            }
         }
     
-        // Trigger toggleGroundTruthField() initially
         window.addEventListener('load', function() {
             toggleGroundTruthField();
+    
+            // Add event listener for noise type change
+            var noiseTypeSelect = document.getElementById("noise_type");
+            noiseTypeSelect.addEventListener("change", function() {
+                toggleNoiseFields(); // Call the toggleNoiseFields function when noise type changes
+            });
         });
     </script>
+    
 </head>
 <body>
     <h1>Upload Images</h1>
@@ -75,13 +100,14 @@
         <div id="noise_fields" style="display: none;">
             <label for="noise_type">Noise Type:</label>
             <select name="noise_type" id="noise_type">
+                <option value="" selected disabled>Select noise type</option>
                 <option value="gauss">Gaussian</option>
                 <option value="impulse">Impulse</option>
                 <option value="speckle">Speckle</option>
             </select>
             <br>
             <label for="noise_parameter">Noise Parameter:</label>
-            <input type="number" step="0.05" name="noise_parameter" id="noise_parameter" min="0" max="100">
+            <input type="number" step="0.05" name="noise_parameter" id="noise_parameter" min="0" max="100" value="0">
             <br>
         </div>
         <label for="calculate_metrics">Calculate Metrics:</label>

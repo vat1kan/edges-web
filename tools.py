@@ -126,7 +126,6 @@ def noised_hed(uploaded_images,noise_type,noise_param,gt):
                 }
         detection_result.append(edges_entry)
     return detection_result
-        
 
 def gauss(image,std_dev):
     mean = 0

@@ -14,7 +14,6 @@ from PIL import Image
 import torch
 import numpy as np
 import argparse
-import base64
 from io import BytesIO
 
 parser = argparse.ArgumentParser(description='PyTorch Pixel Difference Convolutional Networks')
@@ -26,11 +25,10 @@ def PiDiNet(image_data,image):
 
     checkpoint = load_checkpoint(args, BytesIO(image_data))
     if checkpoint is None:
-        print("Checkpoint is None.")
+        #print("Checkpoint is None.")
         return None
     model.load_state_dict(convert_pidinet(checkpoint['state_dict'], 'carv4'))
     
-    #return get_base64_image(test(model, image))
     return test(model, image)
 
 def test(model, image):
@@ -53,9 +51,3 @@ def test(model, image):
 
     result_image = Image.fromarray((result * 255).astype(np.uint8))
     return result_image
-
-# def get_base64_image(image):
-#     buffered = BytesIO()
-#     image.save(buffered, format="PNG")
-#     img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-#     return img_str
