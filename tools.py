@@ -61,6 +61,7 @@ def edge_detection(method, uploaded_images, gt):
                     metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
     
             edges_entry = {
+                'method':method,
                 'filename':filename,
                 'original_image':original_image,
                 'edges_image':base64Convert(edge_image) if method=='HED' else getBase64Image(edge_image),
@@ -90,6 +91,7 @@ def noised_pidinet(uploaded_images,noise_type,noise_param, gt):
             metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
 
         edges_entry = {
+                    'method':"PiDiNet",
                     'filename':f"{filename} with {noise_type} noise (param {noise_param})",
                     'original_image': base64Convert(image_array),
                     'edges_image': getBase64Image(edge_image),
@@ -119,6 +121,7 @@ def noised_hed(uploaded_images,noise_type,noise_param,gt):
             metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
 
         edges_entry = {
+                    'method':"HED",
                     'filename':f"{image_name} with {noise_type} noise (param {noise_param})",
                     'original_image': base64Convert(image),
                     'edges_image':base64Convert(edge_image),
@@ -155,9 +158,9 @@ def evaluating(edges, gt):
     edges_numeric = np.asarray(edges, dtype=np.float32)
     detected_edges_binary = (edges_numeric > 0).astype(np.uint8)
     detected_edges_binary = (edges > 0).astype(np.uint8)
-    precision = np.round(precision_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),5)
-    recall = np.round(recall_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),5)
-    f1 = np.round(f1_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),5)
+    precision = np.round(precision_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
+    recall = np.round(recall_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
+    f1 = np.round(f1_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
 
     boundary_pixels_A = np.column_stack(np.where(edges == 1))
     object_pixels_GT = np.column_stack(np.where(gt == 1))

@@ -3,6 +3,10 @@ from tools import *
 
 app = Flask(__name__)
 
+@app.route("/")
+def about():
+    return render_template("about.html")
+
 @app.route('/pidinet', methods=['GET', 'POST'])
 def pidinet():
     if request.method == 'POST':
@@ -27,7 +31,7 @@ def pidinet():
 
         return render_template('result.html', results=edge_detection(method="PiDiNet",uploaded_images=uploaded_files,gt=None))
     
-    return render_template('index.html')
+    return render_template('index.html',method="PiDiNet")
         
 
 @app.route('/hed',methods=['GET','POST'])
@@ -54,7 +58,7 @@ def hed_evaluating():
 
         return render_template('result.html', results=edge_detection("HED",uploaded_images=uploaded_files,gt=None))
     
-    return render_template('index.html')
+    return render_template('index.html',method = "HED")
 
 if __name__ == '__main__':
     app.run(debug=True)

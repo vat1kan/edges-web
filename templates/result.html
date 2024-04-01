@@ -1,39 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result</title>
-</head>
-<body>
-    <h1>Results</h1>
+{% extends 'layout.html' %}
+{% block title %}Result {% endblock %}
+
+{% block content %}
+    <div class="title">Edge detection results</div>
     {% for result in results %}
-    <div>
-        <p>File Name: {{ result.filename }}</p>
-        <div style="display: flex;">
-            <div style="margin-right: 40px;">
-                <p>Original Image</p>
-                <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image">
+    <div class="result-item">
+        <div style="display: flex; margin: 2% 0">
+            <div class="card" style="width: 36rem; margin-right: 3%;">
+                <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image" class="img-format">
+                <div class="card-body">
+                    <p class="card-text" style="text-align: center; font-size: 16px;">Your <b>{{ result.filename }}</b> original image</p>
+                </div>
             </div>
             {% if result.metrics %}
-            <div>
-                <p>Metrics:</p>
-                <ul>
-                    <li>Recall: {{ result.metrics.recall }}</li>
-                    <li>Precision: {{ result.metrics.precision }}</li>
-                    <li>F1 Score: {{ result.metrics.f1_score }}</li>
-                    <li>FOM: {{ result.metrics.FOM }}</li>
-                </ul>
+            <div class="metrics-format">
+                <p style="font-size: 24px; font-weight: 500; text-align: center;">Metrics</p>
+                    <p>Recall: {{ result.metrics.recall }}</p>
+                    <p>Precision: {{ result.metrics.precision }}<p>
+                    <p>F1 Score: {{ result.metrics.f1_score }}<p>
+                    <p>FOM: {{ result.metrics.FOM }}</p>
             </div>
             {% endif %}
-            <div style="margin-left: 40px;">
-                <p>Edges</p>
-                <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image">
+            <div class="card" style="width: 36rem; margin-left: 3%;">
+                <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image" class="img-format">
+                <div class="card-body">
+                    <p class="card-text" style="text-align: center; font-size: 16px;"><b>{{ result.method }}</b> edges</p>
+                </div>
             </div>
         </div>
     </div>
     <hr>
-{% endfor %}
-</body>
-</html>
+    {% endfor %}
+{% endblock %}
