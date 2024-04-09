@@ -1,5 +1,8 @@
+import cv2
+import traceback
+import numpy as np
 from flask import Flask, render_template, request
-from tools import *
+from tools import edge_detection, noised_hed, noised_pidinet
 
 app = Flask(__name__)
 
@@ -31,7 +34,7 @@ def pidinet():
 
         return render_template('result.html', results=edge_detection(method="PiDiNet",uploaded_images=uploaded_files,gt=None))
     
-    return render_template('index.html',method="PiDiNet")
+    return render_template('form.html',method="PiDiNet")
         
 
 @app.route('/hed',methods=['GET','POST'])
@@ -58,7 +61,24 @@ def hed_evaluating():
 
         return render_template('result.html', results=edge_detection("HED",uploaded_images=uploaded_files,gt=None))
     
-    return render_template('index.html',method = "HED")
+    return render_template('form.html',method = "HED")
+
+@app.errorhandler(404)
+def pageNotFound(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    app.logger.error('Unhandled Exception: %s', (e))
+    tb = traceback.format_exc()
+    tb_lines = traceback.format_exc().split('\n')
+    error = tb_lines[-2]
+    error_log = tb_lines[-3].strip()
+    message = {
+        'error':error,
+        'error_log':error_log
+    }
+    return render_template('traceback.html', traceback=message), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %} Error {% endblock %}
+{% block script %}
+    <script src="../static/scripts.js"></script>
+{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: center; height: 75vh;">
+    <div style="margin: 0% 10%; text-align: center;">
+        <img src="../static/500_icon.png">
+        <h1>500 Internal Server Error</h1>
+        <p>An error occurred while processing your request.</p>
+        <button id="detailsButton" class="accordion">Details</button>
+        <div id="errorDetails" style="display: none;">
+            <div style="text-align:left; margin: 0% 3%;">
+                <pre>
+                    <h6>{{ traceback.error }}<br>{{ traceback.error_log }}</h6>
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

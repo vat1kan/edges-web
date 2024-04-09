@@ -3,7 +3,99 @@
 {% block content %}
 <div class="gif-container">
     <img src="/static/background.gif" alt="GIF">
-    <div class="text-overlay">About</div>
+    <div class="text-overlay">Edges Detection</div>
 </div>
-<p>Text</p>
+<br>
+<div style="padding: 2% 11%; text-align: justify;">
+    <h2><br>Problematic<hr></h2>
+    <p style="font-weight: 400;">
+        Ideally, any image is a set of homogeneous areas of different brightness. In the simplest case of a binary image, we have regions that 
+        contain two brightness values corresponding to objects and background. From the point of view of recognizing and analyzing objects in an 
+        image, the most informative information is not the brightness values of objects, but the characteristics of their boundaries - contours. 
+        In other words, the main information is contained not in the brightness (or color) of individual areas, but in their contours. The task of 
+        contour extraction is to build an image of the boundaries of objects and the outlines of homogeneous areas. We call an image contour a set 
+        of its values in the vicinity of which there is a significant change in the brightness function. Since in digital processing an image is 
+        represented as a function of integer arguments, contours are represented by lines with a width of at least one element. This may cause 
+        ambiguity in the definition of the contour line. If the original image contains areas of smoothly varying brightness in addition to areas 
+        of constant brightness, the definition of a contour remains valid, but the continuity of the contour lines is not guaranteed: contour 
+        breaks will occur in places where the change in the brightness function is not sharp enough. On the other hand, if there is noise in a 
+        certain area of the image, it is possible that "extra" contours will be detected at points that are not really contours. 
+    </p>
+    <div class="text-container"></div>
+        <h2><br>Convolutional Neural Networks<hr></h2>
+        <div class="row image-left">
+            <div style="flex-basis: 25%;" class="image">
+                <img src="../static/cnn.gif" alt="CNN">
+            </div>
+            <div style="flex-basis: 73%;" class="text">
+                <p>
+                    One approach is the use of Convolutional Neural Networks (CNNs). The 
+                    <a href="https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53" target="_blank"> 
+                    Convolutional Neural Network </a> is a deep architecture network with 
+                    direct full layer connectivity. The convolutional neural network is aimed at image processing, as it has several significant advantages 
+                    over its analogs. The first advantage is the use of the concept of weight distribution, which significantly reduces the number of 
+                    parameters to be trained. Due to the smaller number of parameters, such a neural network can be trained smoothly, and there is no need for 
+                    retraining. The second advantage is that the classification stage is combined with the feature extraction stage, as both are subject to 
+                    training. 14 The third advantage is the ease of implementation relative to general neural network models. Convolutional neural networks 
+                    allow for easy image classification, which makes them popular for object detection, face and speech recognition, vehicle recognition, 
+                    diabetic retinopathy, and many others. The general model of a convolutional neural network consists of an input layer, several hidden 
+                    layers, and an output layer. In such a model, the transition between neurons is performed by convolutional operations, which are realized 
+                    by convolutional layers.
+                </p>
+            </div>
+        </div>
+
+        <h2><br>Holistically-Nested Edge Detection<hr></h2>
+        <div class="row text-left">
+            <div class="text">
+                <p>
+                    Comparatively, it was found that the <a href="/hed" target="_blank">HED</a> (Holistically-Nested Edge Detection) network should be used for 
+                    noise immunity research, due to its multi-layer architecture, which allows processing images with varying levels of detail. The next 
+                    advantage of this network is the use of contextual information, which analyzes a specific area of the image in order to understand the 
+                    overall context in conditions of strong interference. The holistic structure of the model allows it to learn and extract contours from 
+                    image to image. It extracts inherited and gradually improved contour maps generated as spin-offs using a nested strategy. To adapt HED 
+                    from VGG-16, the following changes were made <br> - connecting the final convolution layer at each convolution stage - conv1_2, conv2_2, 
+                    conv3_3, conv4_3, and conv5_3 to the side output layer;<br> - removing all fully connected layers and the fifth connecting layer from the 
+                    last stage of VGGNet. 
+                    <br>The internal scales of the path maps are created by the previously mentioned side-output layer, which consists of a single convolution 
+                    layer with a kernel size of 1 × 1. Together with the ground truth, each path map creates a loss function. 
+                    The weighted contour map is the result of merging all contour maps together.
+                </p>
+            </div>
+            <div class="image">
+                <img style="width: 80%;" src="../static/hed.png" alt="HED architecture">
+            </div>
+        </div>
+
+        <h2><br>Pixel Difference Network<hr></h2>
+        <div class="row image-left">
+            <div class="image">
+                <img style="width: 90%;" src="../static/pidinet.png" alt="PiDiNet architecture">
+            </div>
+            <div class="text">
+                <p>
+                    The Pixel Difference Neural Network (<a href="/pidinet" target="_blank">PiDiNet</a>) is a compromise between the accuracy and efficiency of detecting contours in an image. PiDiNet 
+                    uses a novel Pixel Difference Convolution (PDC) to integrate the traditional contour detection operator into the popular convolution 
+                    operation in modern CNN. PDC can easily capture the image gradient information that contributes to contour detection, while retaining the 
+                    learning ability of deep CNN to extract information of semantic significance. In addition, PDC directly integrates the gradient information
+                    extraction process into the convolution operation, which has better contour detection accuracy. In this way, the PiDiNet network can 
+                    still realize contour detection efficiently, even if it occupies little memory. The concept of the network core is to create a lean and 
+                    highly efficient structure. Unlike many other modern solutions, this structure does not use complex multi-branch lightweight structures, 
+                    as they may not be suitable for parallel implementation, which will lead to insufficient efficiency for the contour detection task. 
+                </p>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 2% 11%; text-align: justify;">
+        <h2><br>License and Contact<hr></h2>
+        <p>
+            The presented web resource is an information and research tool and may not be used for commercial purposes. <br>This product is supplied under the <b>GNU General Public License</b>.
+            The software is provided <b>"as is"</b>, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose 
+            and noninfringement. in no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, 
+            arising from, out of or in connection with the software or the use or other dealings in the software.
+            If you consider that this resource violates your copyrights, please contact me via e-mail: <a href="mailto:sergeyhyrenko@gmail.com" style="text-decoration: none;">sergeyhyrenko@gmail.com</a> or open an issue on 
+            <a href="https://github.com/vat1kan/edges-web/issues" target="_blank">GitHub</a>.
+        </p>
+    </div>
+</div>
 {% endblock %}
