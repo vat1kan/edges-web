@@ -2,8 +2,8 @@
 {% block title %}Detect Edges {% endblock %}
 {% block script %} <script src="../static/scripts.js"></script> {% endblock %}
 {% block content %}
-<div class="title"> {{ method }}<br>Edges detection</div>
-<form method="post" enctype="multipart/form-data" onsubmit="return validateForm();" class="input-form">
+<div class="title" style="text-transform: uppercase; font-weight: 700;">{{ method }}<br>Edges detection<hr style="width: 50vw; margin: 1% auto;"></div>
+<form id="uploadForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm();" class="input-form">
     <div class="row mb-3">
         <div class="col-sm-10 offset-sm-2">
             <label for="file" class="form-label" ><h6>Upload your images</h6></label>

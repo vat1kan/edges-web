@@ -172,6 +172,10 @@ a:hover {
   content: "\2212";
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .row {
     flex-direction: column;

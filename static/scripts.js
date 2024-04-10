@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function()
     });
 });
 
+
 function toggleGroundTruthField() 
 {
     var metricsCheck = document.getElementById("calculate_metrics");
@@ -96,6 +97,7 @@ function validateForm()
         return true;
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function() 
 {

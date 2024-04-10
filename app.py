@@ -81,4 +81,4 @@ def handle_exception(e):
     return render_template('traceback.html', traceback=message), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
