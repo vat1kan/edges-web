@@ -5,7 +5,7 @@
     <h1 align="center">EDGES-WEB</h1>
 </p>
 <p align="center">
-    <em><code>► INSERT-TEXT-HERE</code></em>
+    <em><code>► RESEARCH INFORMATION SYSTEM</code></em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/vat1kan/edges-web?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
@@ -38,13 +38,16 @@
 
 ##  Overview
 
-<code>► INSERT-TEXT-HERE</code>
+This web application leverages the power of advanced neural networks, specifically HED (Holistically-Nested Edge Detection) and PiDiNet, to perform cutting-edge image processing tasks. Designed to cater to both enthusiasts and professionals in the field of computer vision, this app provides an intuitive interface for performing edge detection, adding synthetic noise, and calculating various performance metrics on images.
 
 ---
 
 ##  Features
 
-<code>► INSERT-TEXT-HERE</code>
+► <b>Edge Detection</b>: Utilize the HED model for state-of-the-art edge detection, providing crisp and detailed edges in a variety of images.<br>
+► <b>Noise Addition</b>: Integrate noise into images to simulate different conditions and test the robustness of image processing algorithms using our custom noise injection feature.<br>
+► <b>Metric Calculation</b>: Evaluate the performance of edge detection and noise addition processes with built-in metrics, including precision, recall, and F1 score and FOM (Pratt Criteria)<br>
+► <b>PiDiNet</b> Integration: Leverage the PiDiNet model for enhanced edge detection capabilities, especially in challenging visual scenarios. The network architecture used is the one that was presented by the [research team](https://github.com/hellozhuo/pidinet). The network has been restructured to allocate contours of only user pictures. The model can be replaced with any other model by placing it in the [/pidinet/trained_models](https://github.com/vat1kan/edges-web/tree/main/pidinet/trained_models) folder.
 
 ---
 
@@ -89,13 +92,11 @@
 
 ##  Modules
 
-<details closed><summary>.</summary>
-
 | File                                                                                  | Summary                         |
 | ---                                                                                   | ---                             |
-| [app.py](https://github.com/vat1kan/edges-web/blob/master/app.py)                     | <code>► INSERT-TEXT-HERE</code> |
-| [requirements.txt](https://github.com/vat1kan/edges-web/blob/master/requirements.txt) | <code>► INSERT-TEXT-HERE</code> |
-| [tools.py](https://github.com/vat1kan/edges-web/blob/master/tools.py)                 | <code>► INSERT-TEXT-HERE</code> |
+| [app.py](https://github.com/vat1kan/edges-web/blob/master/app.py)                     | <code>► Main Flask file to handle request</code> |
+| [requirements.txt](https://github.com/vat1kan/edges-web/blob/master/requirements.txt) | <code>► A list of needed libraries</code> |
+| [tools.py](https://github.com/vat1kan/edges-web/blob/master/tools.py)                 | <code>► Auxiliary file for function calls </code> |
 
 </details>
 
@@ -234,7 +235,7 @@ Contributions are welcome! Here are several ways you can contribute:
 
 ##  License
 
-This project is protected under the GNU General Public License v3.0. For more details, refer to the [LICENSE](https://spdx.org/licenses/GPL-3.0-or-later.html) file.
+This project is protected under the [GNU General Public License v3.0]. For more details, refer to the [LICENSE](https://spdx.org/licenses/GPL-3.0-or-later.html) file.
 
 ---
 
