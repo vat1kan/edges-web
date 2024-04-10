@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 from HED.hed_edges import hed
 from pidinet.getEdges import PiDiNet
+from skimage.util import random_noise
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 def image_reader(uploaded_file):
@@ -79,11 +80,11 @@ def noised_pidinet(uploaded_images,noise_type,noise_param, gt):
         image_array = np.array(image_bytes)
 
         if noise_type == "gauss":
-            image_array = gauss(image=image_array, std_dev=noise_param)
+            image_array = gauss(image=image_array, var=noise_param)
         elif noise_type == "impulse":
-            image_array = impulse(image=image_array, probability=noise_param)
+            image_array = impulse(image=image_array, var=noise_param)
         elif noise_type == "speckle":
-            image_array = speckle(image=image_array, intensity=noise_param)
+            image_array = speckle(image=image_array, var=noise_param)
 
         edge_image = PiDiNet(image_data,Image.fromarray(image_array))
         if gt != None:
@@ -130,27 +131,19 @@ def noised_hed(uploaded_images,noise_type,noise_param,gt):
         detection_result.append(edges_entry)
     return detection_result
 
-def gauss(image,std_dev):
-    mean = 0
-    rows, cols, chanels = image.shape
-    gaussian_noise = np.random.normal(mean, std_dev, (rows, cols, chanels))
-    noisy_image = cv2.add(np.float32(image), np.float32(gaussian_noise), dtype=cv2.CV_32F)
-    noisy_image = np.clip(noisy_image, 0, 255).astype(np.uint8)
+def gauss(image, var):
+    noisy_image = random_noise(image, mode='gaussian', var=var)
+    noisy_image = (255 * noisy_image).astype(np.uint8)
     return noisy_image
 
-def impulse(image, probability):
-    noisy_image = np.copy(image)
-    noise_mask = np.random.rand(*image.shape[:2]) < probability
-    noisy_image[noise_mask] = 0
-    noisy_image[noise_mask ^ 1] = 255
+def impulse(image, var):
+    noisy_image = random_noise(image, mode='s&p', amount=var)
+    noisy_image = (255 * noisy_image).astype(np.uint8)
     return noisy_image
 
-def speckle(image, intensity):
-    row, col, ch = image.shape
-    gauss = np.random.randn(row, col, ch)
-    noisy = image + image * gauss * intensity
-    noisy_image = np.clip(noisy, 0, 255).astype(np.uint8)
-
+def speckle(image, var):
+    noisy_image = random_noise(image, mode='speckle', var=var)
+    noisy_image = (255 * noisy_image).astype(np.uint8)
     return noisy_image
 
 def evaluating(edges, gt):
