@@ -8,17 +8,9 @@ function toggleNoiseFields()
     if (checkbox.checked) 
     {
         noiseFields.style.display = "block";
-        if (noiseType == "gauss") {
-            noiseParameterInput.setAttribute("min", "0");
-            noiseParameterInput.setAttribute("max", "100");
-            noiseParameterInput.setAttribute("step", "5");
-        } 
-        else 
-        {
-            noiseParameterInput.setAttribute("min", "0");
-            noiseParameterInput.setAttribute("max", "1");
-            noiseParameterInput.setAttribute("step", "0.05");
-        }
+        noiseParameterInput.setAttribute("min", "0");
+        noiseParameterInput.setAttribute("max", "0,2");
+        noiseParameterInput.setAttribute("step", "0.02");
     } 
     else 
     {

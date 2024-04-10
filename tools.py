@@ -110,11 +110,11 @@ def noised_hed(uploaded_images,noise_type,noise_param,gt):
         image = np.array(Image.open(BytesIO(image_data)).convert('RGB'))
 
         if noise_type == "gauss":
-            image = gauss(image=image, std_dev=noise_param)
+            image = gauss(image=image, var=noise_param)
         elif noise_type == "impulse":
-            image = impulse(image=image, probability=noise_param)
+            image = impulse(image=image, var=noise_param)
         elif noise_type == "speckle":
-            image = speckle(image=image, intensity=noise_param)
+            image = speckle(image=image, var=noise_param)
 
         edge_image = hed(image)
         if gt != None:
