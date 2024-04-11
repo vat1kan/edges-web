@@ -9,7 +9,7 @@ function toggleNoiseFields()
     {
         noiseFields.style.display = "block";
         noiseParameterInput.setAttribute("min", "0");
-        noiseParameterInput.setAttribute("max", "0,2");
+        noiseParameterInput.setAttribute("max", "0.2");
         noiseParameterInput.setAttribute("step", "0.02");
     } 
     else 
@@ -48,48 +48,40 @@ function toggleGroundTruthField()
     }
 }
 
-function validateForm() 
-{
+function validateForm() {
     var metricsCheck = document.getElementById("calculate_metrics");
     var mainFilesInput = document.getElementsByName("file")[0];
     var mainFiles = mainFilesInput.files;
     var gtFilesInput = document.getElementsByName("ground_truth")[0];
     var gtFiles = gtFilesInput.files;
 
-    if (mainFiles.length === 0) 
-    {
+    if (mainFiles.length === 0) {
         alert("Please upload at least one image.");
         return false;
     }
 
-    if (mainFiles.length > 30) 
-    {
+    if (mainFiles.length > 30) {
         alert("You can upload at most 30 images.");
         return false;
     }
 
-    for (var i = 0; i < mainFiles.length; i++) 
-    {
-        if (mainFiles[i].size > 5 * 1024 * 1024 || gtFiles[i].size > 5 * 1024 * 1024) 
-        {
+    for (var i = 0; i < mainFiles.length; i++) {
+        if (mainFiles[i].size > 5 * 1024 * 1024 || (gtFiles[i] && gtFiles[i].size > 5 * 1024 * 1024)) {
             alert("Image size should be less than 5 MB.");
             return false;
         }
     }
 
-    if (metricsCheck.checked) 
-    {
+    if (metricsCheck.checked) {
         var groundTruthFiles = document.getElementsByName("ground_truth")[0].files;
-
+        console.log(mainFiles.length, groundTruthFiles.length); // Debugging line
         if (mainFiles.length !== groundTruthFiles.length) {
             alert("Number of original images must match number of ground truth images.");
             return false;
         }
-
         return true;
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', function() 
 {
