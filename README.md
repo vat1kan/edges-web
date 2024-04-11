@@ -29,10 +29,8 @@
   - [ Installation](#-installation)
   - [ Usage](#-usage)
   - [ Tests](#-tests)
-- [ Project Roadmap](#-project-roadmap)
 - [ Contributing](#-contributing)
 - [ License](#-license)
-- [ Acknowledgments](#-acknowledgments)
 </details>
 <hr>
 
@@ -104,7 +102,7 @@ This web application leverages the power of advanced neural networks, specifical
 
 | File                                                                              | Summary                         |
 | ---                                                                               | ---                             |
-| [hed_edges.py](https://github.com/vat1kan/edges-web/blob/master/HED\hed_edges.py) | <code>► INSERT-TEXT-HERE</code> |
+| [hed_edges.py](https://github.com/vat1kan/edges-web/blob/master/HED\hed_edges.py) | <code>► Basic structure of the HED network</code> |
 
 </details>
 
@@ -112,7 +110,7 @@ This web application leverages the power of advanced neural networks, specifical
 
 | File                                                                                          | Summary                         |
 | ---                                                                                           | ---                             |
-| [deploy.prototxt](https://github.com/vat1kan/edges-web/blob/master/HED\model\deploy.prototxt) | <code>► INSERT-TEXT-HERE</code> |
+| [deploy.prototxt](https://github.com/vat1kan/edges-web/blob/master/HED\model\deploy.prototxt) | <code>► Network architecture</code> |
 
 </details>
 
@@ -120,8 +118,8 @@ This web application leverages the power of advanced neural networks, specifical
 
 | File                                                                                | Summary                         |
 | ---                                                                                 | ---                             |
-| [getEdges.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\getEdges.py) | <code>► INSERT-TEXT-HERE</code> |
-| [utils.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\utils.py)       | <code>► INSERT-TEXT-HERE</code> |
+| [getEdges.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\getEdges.py) | <code>► File for calling PiDiNet network functions</code> |
+| [utils.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\utils.py)       | <code>► PiDiNet network features</code> |
 
 </details>
 
@@ -129,10 +127,10 @@ This web application leverages the power of advanced neural networks, specifical
 
 | File                                                                                                     | Summary                         |
 | ---                                                                                                      | ---                             |
-| [config.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\config.py)                   | <code>► INSERT-TEXT-HERE</code> |
-| [convert_pidinet.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\convert_pidinet.py) | <code>► INSERT-TEXT-HERE</code> |
-| [ops.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\ops.py)                         | <code>► INSERT-TEXT-HERE</code> |
-| [pidinet.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\pidinet.py)                 | <code>► INSERT-TEXT-HERE</code> |
+| [config.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\config.py)                   | <code>► PiDiNet network features</code> |
+| [convert_pidinet.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\convert_pidinet.py) | <code>► PiDiNet network features</code> |
+| [ops.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\ops.py)                         | <code>► PiDiNet network features</code> |
+| [pidinet.py](https://github.com/vat1kan/edges-web/blob/master/pidinet\models\pidinet.py)                 | <code>► PiDiNet network features</code> |
 
 </details>
 
@@ -140,13 +138,12 @@ This web application leverages the power of advanced neural networks, specifical
 
 | File                                                                                        | Summary                         |
 | ---                                                                                         | ---                             |
-| [404.html](https://github.com/vat1kan/edges-web/blob/master/templates\404.html)             | <code>► INSERT-TEXT-HERE</code> |
-| [about.html](https://github.com/vat1kan/edges-web/blob/master/templates\about.html)         | <code>► INSERT-TEXT-HERE</code> |
-| [form.html](https://github.com/vat1kan/edges-web/blob/master/templates\form.html)           | <code>► INSERT-TEXT-HERE</code> |
-| [index.html](https://github.com/vat1kan/edges-web/blob/master/templates\index.html)         | <code>► INSERT-TEXT-HERE</code> |
-| [layout.html](https://github.com/vat1kan/edges-web/blob/master/templates\layout.html)       | <code>► INSERT-TEXT-HERE</code> |
-| [result.html](https://github.com/vat1kan/edges-web/blob/master/templates\result.html)       | <code>► INSERT-TEXT-HERE</code> |
-| [traceback.html](https://github.com/vat1kan/edges-web/blob/master/templates\traceback.html) | <code>► INSERT-TEXT-HERE</code> |
+| [404.html](https://github.com/vat1kan/edges-web/blob/master/templates\404.html)             | <code>► Page while handling a 404 error</code> |
+| [about.html](https://github.com/vat1kan/edges-web/blob/master/templates\about.html)         | <code>► Main page with project info</code> |
+| [form.html](https://github.com/vat1kan/edges-web/blob/master/templates\form.html)           | <code>► Image download and processing page</code> |
+| [layout.html](https://github.com/vat1kan/edges-web/blob/master/templates\layout.html)       | <code>► Basic Jinja template</code> |
+| [result.html](https://github.com/vat1kan/edges-web/blob/master/templates\result.html)       | <code>► Basic Jinja template</code> |
+| [traceback.html](https://github.com/vat1kan/edges-web/blob/master/templates\traceback.html) | <code>► Page while handling a 500 error</code> |
 
 </details>
 
@@ -156,7 +153,7 @@ This web application leverages the power of advanced neural networks, specifical
 
 **System Requirements:**
 
-* **Python**: `version x.y.z`
+* **Python**: `version 3.9.0 and above`
 
 ###  Installation
 
@@ -225,7 +222,7 @@ Contributions are welcome! Here are several ways you can contribute:
 <summary>Contributor Graph</summary>
 <br>
 <p align="center">
-   <a href="https://github.com{/vat1kan/edges-web/}graphs/contributors">
+   <a href="https://github.com/vat1kan/edges-web/}graphs/contributors">
       <img src="https://contrib.rocks/image?repo=vat1kan/edges-web">
    </a>
 </p>
