@@ -19,11 +19,13 @@ from io import BytesIO
 parser = argparse.ArgumentParser(description='PyTorch Pixel Difference Convolutional Networks')
 args = parser.parse_args()
 
-def PiDiNet(image_data,image):
+def PiDiNet(image):
+#def PiDiNet(image_data,image):
     global args
     model = getattr(models, 'pidinet_converted')(args)
 
-    checkpoint = load_checkpoint(args, BytesIO(image_data))
+    checkpoint = load_checkpoint(args, BytesIO(image))
+    #checkpoint = load_checkpoint(args, BytesIO(image_data))
     if checkpoint is None:
         #print("Checkpoint is None.")
         return None

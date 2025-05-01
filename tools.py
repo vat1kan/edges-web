@@ -40,10 +40,13 @@ def getBase64Image(image):
     return img_str
 
 def edge_detection(method, uploaded_images, gt):
+
     detection_result = []
+
     for idx, image in enumerate(uploaded_images):
         if image.filename != '':
             filename = image.filename
+            
             if method == 'PiDiNet':
                 image_data, image_bytes = pidinet_reader(image)
                 edge_image = PiDiNet(image_data,image_bytes)
@@ -129,6 +132,7 @@ def noised_hed(uploaded_images,noise_type,noise_param,gt):
                     'metrics': metrics if gt != None else None
                 }
         detection_result.append(edges_entry)
+        
     return detection_result
 
 def gauss(image, var):

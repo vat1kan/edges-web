@@ -3,14 +3,14 @@ function toggleNoiseFields()
     var checkbox = document.getElementById("noise_check");
     var noiseFields = document.getElementById("noise_fields");
     var noiseType = document.getElementById("noise_type").value;
-    var noiseParameterInput = document.getElementById("noise_parameter");
+    var noiseParameterInput = document.getElementById("noise_value");
 
     if (checkbox.checked) 
     {
         noiseFields.style.display = "block";
         noiseParameterInput.setAttribute("min", "0");
-        noiseParameterInput.setAttribute("max", "0.2");
-        noiseParameterInput.setAttribute("step", "0.02");
+        noiseParameterInput.setAttribute("max", "0.1");
+        noiseParameterInput.setAttribute("step", "0.005");
     } 
     else 
     {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function()
 
     document.getElementById("noise_type").addEventListener("change", function() 
     {
-        document.getElementById("noise_parameter").value = 0;
+        document.getElementById("noise_value").value = 0;
         toggleNoiseFields();
     });
 });
@@ -74,7 +74,7 @@ function validateForm() {
 
     if (metricsCheck.checked) {
         var groundTruthFiles = document.getElementsByName("ground_truth")[0].files;
-        console.log(mainFiles.length, groundTruthFiles.length); // Debugging line
+        console.log(mainFiles.length, groundTruthFiles.length);
         if (mainFiles.length !== groundTruthFiles.length) {
             alert("Number of original images must match number of ground truth images.");
             return false;
