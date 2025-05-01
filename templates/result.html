@@ -3,22 +3,22 @@
 
 {% block content %}
     <div class="title">Edge detection results</div>
-    {% for result in results %}
+    {% for result in result %}
     <div class="result-item">
         <div style="display: flex; margin: 2% 0">
             <div class="card" style="width: 36rem; margin-right: 3%;">
-                <img src="data:image/png;base64,{{ result.original_image}}" alt="Original Image" class="img-format">
+                <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
                 <div class="card-body">
-                    <p class="card-text" style="text-align: center; font-size: 16px;">Your <b>{{ result.filename }}</b> original image</p>
+                    <p class="card-text" style="text-align: center; font-size: 16px;">{{ result.filename | safe }}</p>
                 </div>
             </div>
             {% if result.metrics %}
             <div class="metrics-format">
                 <p style="font-size: 24px; font-weight: 500; text-align: center;">Metrics</p>
-                    <p>Recall: {{ result.metrics.recall }}</p>
-                    <p>Precision: {{ result.metrics.precision }}<p>
-                    <p>F1 Score: {{ result.metrics.f1_score }}<p>
-                    <p>FOM: {{ result.metrics.FOM }}</p>
+                    <p><b>Recall:</b> {{ result.metrics.recall }}</p>
+                    <p><b>Precision:</b> {{ result.metrics.precision }}</p>
+                    <p><b>F1 Score:</b> {{ result.metrics.f1_score }}</p>
+                    <p><b>FOM:</b> {{ result.metrics.FOM }}</p>
             </div>
             {% endif %}
             <div class="card" style="width: 36rem; margin-left: 3%;">
