@@ -4,172 +4,161 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 from HED.hed_edges import hed
+from scipy.spatial import cKDTree
 from pidinet.getEdges import PiDiNet
 from skimage.util import random_noise
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-def image_reader(uploaded_file):
-    uploaded_file.seek(0)
-    file_content = uploaded_file.read()
-    if not file_content:
-        print('The file is empty')
-        return None
-    image = cv2.imdecode(np.frombuffer(file_content, np.uint8), cv2.IMREAD_COLOR)
-    if image is None:
-        print('Failed to decode image')
-        return None
-    decoded_image = base64.b64encode(cv2.imencode('.png', image)[1]).decode('utf-8')
-    return decoded_image
+def image_reader(file):
+    img = Image.open(file).convert('RGB')
+    return np.array(img)
 
-def pidinet_reader(image):
-        image_data = image.read()
-        image_bytes = Image.open(BytesIO(image_data)).convert('RGB')
-        return image_data, image_bytes
+def image_to_base64(img_array):
+    img = Image.fromarray(img_array)
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    base64_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    return base64_str
 
-def base64Convert(image_array):
-    pil_image = Image.fromarray(image_array)
-    buffered = BytesIO()
-    pil_image.save(buffered, format="png")
-    encoded_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    return encoded_image
-
-def getBase64Image(image):
-    buffered = BytesIO()
-    image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
-    return img_str
-
-def edge_detection(method, uploaded_images, gt):
-
-    detection_result = []
-
-    for idx, image in enumerate(uploaded_images):
-        if image.filename != '':
-            filename = image.filename
-            
-            if method == 'PiDiNet':
-                image_data, image_bytes = pidinet_reader(image)
-                edge_image = PiDiNet(image_data,image_bytes)
-                if gt != None:
-                    recall, precision, f1, fom = evaluating(np.array(edge_image),gt[idx])
-                    metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
-
-            original_image = image_reader(image)
-            if method == "HED":
-                if isinstance(original_image, str):
-                    image = base64.b64decode(original_image)
-                    image = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_COLOR)
-                edge_image = hed(image)
-                if gt != None:
-                    recall, precision, f1, fom = evaluating(np.array(edge_image),gt[idx])
-                    metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
-    
-            edges_entry = {
-                'method':method,
-                'filename':filename,
-                'original_image':original_image,
-                'edges_image':base64Convert(edge_image) if method=='HED' else getBase64Image(edge_image),
-                'metrics': metrics if gt != None else None
-            }
-            detection_result.append(edges_entry)
-    
-    return detection_result
-
-def noised_pidinet(uploaded_images,noise_type,noise_param, gt):
-    detection_result = []
-    for idx, image in enumerate(uploaded_images):
-        filename = image.filename
-        image_data, image_bytes = pidinet_reader(image)
-        image_array = np.array(image_bytes)
-
-        if noise_type == "gauss":
-            image_array = gauss(image=image_array, var=noise_param)
-        elif noise_type == "impulse":
-            image_array = impulse(image=image_array, var=noise_param)
-        elif noise_type == "speckle":
-            image_array = speckle(image=image_array, var=noise_param)
-
-        edge_image = PiDiNet(image_data,Image.fromarray(image_array))
-        if gt != None:
-            recall, precision, f1, fom = evaluating(np.array(edge_image),gt[idx])
-            metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
-
-        edges_entry = {
-                    'method':"PiDiNet",
-                    'filename':f"{filename} with {noise_type} noise (param {noise_param})",
-                    'original_image': base64Convert(image_array),
-                    'edges_image': getBase64Image(edge_image),
-                    'metrics': metrics if gt != None else None
-                }
-        detection_result.append(edges_entry)
-    
-    return detection_result
-
-def noised_hed(uploaded_images,noise_type,noise_param,gt):
-    detection_result = []
-    for idx, image in enumerate(uploaded_images):
-        image_name = image.filename
-        image_data = image.read()
-        image = np.array(Image.open(BytesIO(image_data)).convert('RGB'))
-
-        if noise_type == "gauss":
-            image = gauss(image=image, var=noise_param)
-        elif noise_type == "impulse":
-            image = impulse(image=image, var=noise_param)
-        elif noise_type == "speckle":
-            image = speckle(image=image, var=noise_param)
-
-        edge_image = hed(image)
-        if gt != None:
-            recall, precision, f1, fom = evaluating(np.array(edge_image),gt[idx])
-            metrics = {'recall': recall, 'precision': precision, 'f1_score': f1, 'FOM': fom}
-
-        edges_entry = {
-                    'method':"HED",
-                    'filename':f"{image_name} with {noise_type} noise (param {noise_param})",
-                    'original_image': base64Convert(image),
-                    'edges_image':base64Convert(edge_image),
-                    'metrics': metrics if gt != None else None
-                }
-        detection_result.append(edges_entry)
-        
-    return detection_result
-
-def gauss(image, var):
+def gauss(image, var=0.005):
     noisy_image = random_noise(image, mode='gaussian', var=var)
-    noisy_image = (255 * noisy_image).astype(np.uint8)
+    noisy_image = np.clip(255 * noisy_image, 0, 255).astype(np.uint8)
     return noisy_image
 
-def impulse(image, var):
-    noisy_image = random_noise(image, mode='s&p', amount=var)
-    noisy_image = (255 * noisy_image).astype(np.uint8)
+def impulse(image, amount=0.01):
+    noisy_image = random_noise(image, mode='s&p', amount=amount)
+    noisy_image = np.clip(255 * noisy_image, 0, 255).astype(np.uint8)
     return noisy_image
 
-def speckle(image, var):
+def speckle(image, var=0.005):
     noisy_image = random_noise(image, mode='speckle', var=var)
-    noisy_image = (255 * noisy_image).astype(np.uint8)
+    noisy_image = np.clip(255 * noisy_image, 0, 255).astype(np.uint8)
     return noisy_image
 
-def evaluating(edges, gt):
-    ground_truth_binary = (gt > 0).astype(np.uint8)
-    edges_numeric = np.asarray(edges, dtype=np.float32)
-    detected_edges_binary = (edges_numeric > 0).astype(np.uint8)
-    detected_edges_binary = (edges > 0).astype(np.uint8)
-    precision = np.round(precision_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
-    recall = np.round(recall_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
-    f1 = np.round(f1_score(ground_truth_binary.flatten(), detected_edges_binary.flatten()),4)
+def evaluating(img, gt):
+    gt_bin = (gt > 0).astype(np.uint8)
+    pred_bin = (img > 0).astype(np.uint8)
 
-    boundary_pixels_A = np.column_stack(np.where(edges == 1))
-    object_pixels_GT = np.column_stack(np.where(gt == 1))
-    m = len(boundary_pixels_A)
-    n = len(object_pixels_GT)
-    if m == 0 or n == 0:
-        return 0, 0, 0, 0
-    d = np.zeros(m)
-    for i in range(m):
-        dist = np.sum((boundary_pixels_A[i, :] - object_pixels_GT) ** 2, axis=1)
-        d[i] = np.min(dist)
+    precision = round(precision_score(gt_bin.ravel(), pred_bin.ravel(), zero_division=0), 4)
+    recall = round(recall_score(gt_bin.ravel(), pred_bin.ravel(), zero_division=0), 4)
+    f1 = round(f1_score(gt_bin.ravel(), pred_bin.ravel(), zero_division=0), 4)
+
+    pred_coords = np.column_stack(np.where(pred_bin == 1))
+    gt_coords = np.column_stack(np.where(gt_bin == 1))
+
+    if len(pred_coords) == 0 or len(gt_coords) == 0:
+        return recall, precision, f1, 0.0
+
+    tree = cKDTree(gt_coords)
+    dists, _ = tree.query(pred_coords, k=1)
+    dists_sq = dists ** 2
+
     alfa = 1 / 9
-    FOM = np.round(np.sum(1 / (1 + alfa * d)) / max(m, n),4)
+    fom = round(np.sum(1 / (1 + alfa * dists_sq)) / max(len(pred_coords), len(gt_coords)), 4)
 
-    return recall, precision, f1, FOM
+    return {
+        'recall': recall,
+        'precision': precision,
+        'f1': f1,
+        'fom': fom
+    }
+
+noise_functions = {
+    'gauss': gauss,
+    'impulse': impulse,
+    'speckle': speckle
+}
+
+def edge_detection(imgs: list, method: str, noise_type: str, noise_value: float, ground_truth: list):
+    try:
+        result = []
+
+        for idx, img_file in enumerate(imgs):
+            img = image_reader(img_file)
+
+            if noise_type and noise_value:
+                img = noise_functions[noise_type](img, float(noise_value))
+
+            if method == 'HED':
+                edges = cv2.cvtColor(np.array(hed(img)), cv2.COLOR_RGB2BGR)
+
+            elif method == "PiDiNet":
+                edges = cv2.cvtColor(np.array(PiDiNet(img)), cv2.COLOR_RGB2BGR)
+
+            else:
+                raise ValueError(f"Unknown method: {method}")
+            
+            metrics = None
+            if ground_truth and len(ground_truth) > idx:
+                gt_image = np.array(Image.open(ground_truth[idx]).convert('RGB'))
+                if gt_image is not None:
+                    metrics = evaluating(edges, gt_image)
+            
+
+            result.append({
+                'method': method,
+                'filename': f"<b>Image {idx+1}</b> with <b>{noise_type}</b> noise (param: <b>{noise_value}</b>)" 
+                            if noise_value and float(noise_value) > 0 else f"<b>Image {idx+1}</b>",
+                'original_image': image_to_base64(np.array(img)),
+                'edges_image': image_to_base64(edges),
+                'metrics': metrics if metrics is not None else None
+            })
+
+        return result
+
+    except Exception as e:
+        print(f"Error in edge_detection: {e}")
+
+def comparison(imgs: list, method: str, noise_type: str, noise_value: float, ground_truth: list):
+    try:
+        result = []
+
+        for idx, img_file in enumerate(imgs):
+            img = image_reader(img_file)
+
+            if noise_type and noise_value:
+                img = noise_functions[noise_type](img, float(noise_value))
+
+            edge_methods = {
+                'hed': cv2.cvtColor(np.array(hed(img)), cv2.COLOR_RGB2BGR),
+                'pidinet': cv2.cvtColor(np.array(PiDiNet(img)), cv2.COLOR_RGB2BGR)
+            }
+
+            gt_image = None
+            if ground_truth and len(ground_truth) > idx:
+                gt_image = np.array(Image.open(ground_truth[idx]).convert('RGB'))
+
+            metrics_values = {}
+            metrics = None
+            for name, edges in edge_methods.items():
+                if gt_image is not None:
+                    metrics = evaluating(edges, gt_image)
+                metrics_values[name] = {
+                    'recall': metrics['recall'] if metrics else None,
+                    'precision': metrics['precision'] if metrics else None,
+                    'f1': metrics['f1'] if metrics else None,
+                    'fom': metrics['fom'] if metrics else None
+                }
+
+            hed_metrics = metrics_values['hed']
+            pidinet_metrics = metrics_values['pidinet']
+
+
+            result.append({
+                'method': method,
+                'filename': f"<b>Image {idx+1}</b> with <b>{noise_type}</b> noise (param: <b>{noise_value}</b>)" 
+                            if noise_value and float(noise_value) > 0 else f"<b>Image {idx+1}</b>",
+                'original_image': image_to_base64(np.array(img)),
+                'hed_edges': image_to_base64(edge_methods['hed']),
+                'hed_metrics': hed_metrics if metrics else None,
+                'pidinet_edges': image_to_base64(edge_methods['pidinet']),
+                'pidinet_metrics': pidinet_metrics if metrics else None
+            })
+
+        return result
+
+    except Exception as e:
+        print(f"Error in edge_detection: {e}")
+
+
+

@@ -56,7 +56,10 @@ a:hover {
 }
 
 .img-format {
-    border-radius: 2%;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 2%;
 }
 
 .result-item {
@@ -113,6 +116,20 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2em; 
+}
+
+.result-row {
+  display: flex;
+  gap: 2rem;
+  margin: 4% 0;
+  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card, .metrics-format {
+  width: 33rem;
+  box-sizing: border-box;
 }
 
 .image {
