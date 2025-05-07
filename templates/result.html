@@ -2,33 +2,107 @@
 {% block title %}Result {% endblock %}
 
 {% block content %}
-    <div class="title">Edge detection results</div>
+    <div class="title">Edges Detection Results</div>
+
     {% for result in result %}
-    <div class="result-item">
-        <div style="display: flex; margin: 2% 0">
-            <div class="card" style="width: 36rem; margin-right: 3%;">
-                <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
-                <div class="card-body">
-                    <p class="card-text" style="text-align: center; font-size: 16px;">{{ result.filename | safe }}</p>
+        {% if result.method == 'Comparison' %}
+        <div class="result-item">
+            <div class="result-row">
+
+                <!-- Original Image (with noise, optional) -->
+                <div class="card">
+                    <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
+                    <div class="card-body">
+                        <p class="card-text" style="text-align: center; font-size: 18px;">{{ result.filename | safe }}</p>
+                    </div>
                 </div>
-            </div>
-            {% if result.metrics %}
-            <div class="metrics-format">
-                <p style="font-size: 24px; font-weight: 500; text-align: center;">Metrics</p>
-                    <p><b>Recall:</b> {{ result.metrics.recall }}</p>
-                    <p><b>Precision:</b> {{ result.metrics.precision }}</p>
-                    <p><b>F1 Score:</b> {{ result.metrics.f1_score }}</p>
-                    <p><b>FOM:</b> {{ result.metrics.FOM }}</p>
-            </div>
-            {% endif %}
-            <div class="card" style="width: 36rem; margin-left: 3%;">
-                <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image" class="img-format">
-                <div class="card-body">
-                    <p class="card-text" style="text-align: center; font-size: 16px;"><b>{{ result.method }}</b> edges</p>
+
+                <!-- HED Edges Image -->
+                <div class="card">
+                    <img src="data:image/png;base64,{{ result.hed_edges }}" alt="Hed Edges Image" class="img-format">
+                    <div class="card-body">
+                        <p class="card-text" style="text-align: center; font-size: 18px;"><b>HED Edges Detection Result</b></p>
+                        
+                        {% if result.hed_metrics %}
+                        <table style="margin: 10px auto; font-size: 16px; text-align: left; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.hed_metrics.recall }}</td>
+                                <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.hed_metrics.precision }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 12px;" title="Balance between Recall and Precision"><b>F1:</b> {{ result.hed_metrics.f1 }}</td>
+                                <td style="padding: 4px 12px;" title="Overall assessment of model performance"><b>FOM:</b> {{ result.hed_metrics.fom }}</td>
+                            </tr>
+                        </table>
+                        {% endif %}
+                    </div>
                 </div>
+
+                <!-- PiDiNet Edges Image -->
+                <div class="card">
+                    <img src="data:image/png;base64,{{ result.pidinet_edges }}" alt="PiDiNet Edges Image" class="img-format">
+                    <div class="card-body">
+                        <p class="card-text" style="text-align: center; font-size: 18px;"><b> PiDiNet Edges Detection Result</b></p>
+                        {% if result.pidinet_metrics %}
+                        <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.pidinet_metrics.recall }}</td>
+                                <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.pidinet_metrics.precision }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 12px;" title="Balance between Recall and Precision"><b>F1:</b> {{ result.pidinet_metrics.f1 }}</td>
+                                <td style="padding: 4px 12px;" title="Overall assessment of model performance"><b>FOM:</b> {{ result.pidinet_metrics.fom }}</td>
+                            </tr>
+                        </table>
+                        {% endif %}
+
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
-    <hr>
+        {% else %}
+            <div class="result-item">
+                <div class="result-row">
+
+                    <!-- Original Image (with noise, optional) -->
+                    <div class="card">
+                        <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
+                        <div class="card-body">
+                            <p class="card-text" style="text-align: center; font-size: 16px;">{{ result.filename | safe }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Edges Result Image -->
+                    <div class="card">
+                        <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image" class="img-format">
+                        <div class="card-body">
+                            <p class="card-text" style="text-align: center; font-size: 16px;"><b>{{ result.method }}</b> edges</p>
+
+                            <!-- Edges Detection Result Metrics -->
+                            {% if result.metrics %}
+                            <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.metrics.recall }}</td>
+                                    <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.metrics.precision }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 4px 12px;" title="Balance between Recall and Precision"><b>F1:</b> {{ result.metrics.f1 }}</td>
+                                    <td style="padding: 4px 12px;" title="Overall assessment of model performance"><b>FOM:</b> {{ result.metrics.fom }}</td>
+                                </tr>
+                            </table>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
     {% endfor %}
 {% endblock %}
+
+
