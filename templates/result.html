@@ -11,7 +11,7 @@
 
                 <!-- Original Image (with noise, optional) -->
                 <div class="card">
-                    <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
+                    <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format" data-testid="stock_img">
                     <div class="card-body">
                         <p class="card-text" style="text-align: center; font-size: 18px;">{{ result.filename | safe }}</p>
                     </div>
@@ -19,12 +19,12 @@
 
                 <!-- HED Edges Image -->
                 <div class="card">
-                    <img src="data:image/png;base64,{{ result.hed_edges }}" alt="Hed Edges Image" class="img-format">
+                    <img src="data:image/png;base64,{{ result.hed_edges }}" alt="Hed Edges Image" class="img-format" data-testid="hed_edges">
                     <div class="card-body">
                         <p class="card-text" style="text-align: center; font-size: 18px;"><b>HED Edges Detection Result</b></p>
                         
                         {% if result.hed_metrics %}
-                        <table style="margin: 10px auto; font-size: 16px; text-align: left; border-collapse: collapse;">
+                        <table style="margin: 10px auto; font-size: 16px; text-align: left; border-collapse: collapse;" data-testid="hed_metrics">
                             <tr>
                                 <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.hed_metrics.recall }}</td>
                                 <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.hed_metrics.precision }}</td>
@@ -40,11 +40,11 @@
 
                 <!-- PiDiNet Edges Image -->
                 <div class="card">
-                    <img src="data:image/png;base64,{{ result.pidinet_edges }}" alt="PiDiNet Edges Image" class="img-format">
+                    <img src="data:image/png;base64,{{ result.pidinet_edges }}" alt="PiDiNet Edges Image" class="img-format" data-testid="pidinet_edges">
                     <div class="card-body">
                         <p class="card-text" style="text-align: center; font-size: 18px;"><b> PiDiNet Edges Detection Result</b></p>
                         {% if result.pidinet_metrics %}
-                        <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;">
+                        <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;" data-testid="pidinet_metrics">
                             <tr>
                                 <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.pidinet_metrics.recall }}</td>
                                 <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.pidinet_metrics.precision }}</td>
@@ -67,7 +67,7 @@
 
                     <!-- Original Image (with noise, optional) -->
                     <div class="card">
-                        <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format">
+                        <img src="data:image/png;base64,{{ result.original_image }}" alt="Original Image" class="img-format" data-testid="stock_img">
                         <div class="card-body">
                             <p class="card-text" style="text-align: center; font-size: 16px;">{{ result.filename | safe }}</p>
                         </div>
@@ -75,13 +75,13 @@
 
                     <!-- Edges Result Image -->
                     <div class="card">
-                        <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image" class="img-format">
+                        <img src="data:image/png;base64,{{ result.edges_image }}" alt="Edges image" class="img-format" data-testid="edges_image">
                         <div class="card-body">
                             <p class="card-text" style="text-align: center; font-size: 16px;"><b>{{ result.method }}</b> edges</p>
 
                             <!-- Edges Detection Result Metrics -->
                             {% if result.metrics %}
-                            <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;">
+                            <table style="margin: 10px auto; font-size: 16px; text-align: center; border-collapse: collapse;" data-testid="edges_metrics">
                                 <tr>
                                     <td style="padding: 4px 12px;" title="Proportion of positive examples found"><b>Recall:</b> {{ result.metrics.recall }}</td>
                                     <td style="padding: 4px 12px;" title="Accuracy of positive examples found"><b>Precision:</b> {{ result.metrics.precision }}</td>
