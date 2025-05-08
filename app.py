@@ -12,19 +12,30 @@ def about():
 def pidinet():
     if request.method == 'POST':
 
-        file_list = request.files.getlist('file') or []
-        ground_truth_raw = request.files.getlist('ground_truth') or []
+        is_bsds = request.form.get('use_bsds500') is not None
 
-        if not file_list:
-            return "No input files uploaded", 400
+        if is_bsds:
+            data = edge_detection(
+                use_bsds=True,
+                method='PiDiNet',
+                noise_type=request.form.get('noise_type') or None,
+                noise_value=request.form.get('noise_value'),
+                ground_truth=request.form.get('calculate_metrics') is not None
+            )
+        else:
+            file_list = request.files.getlist('file') or []
+            ground_truth_raw = request.files.getlist('ground_truth') or []
 
-        data = edge_detection(
-            imgs=file_list,
-            method='PiDiNet',
-            noise_type = request.form.get('noise_type') or None,
-            noise_value = request.form.get('noise_value'),
-            ground_truth = [f for f in ground_truth_raw if f and f.filename]
-        )
+            if not file_list:
+                return "No input files uploaded", 400
+
+            data = edge_detection(
+                imgs=file_list,
+                method='PiDiNet',
+                noise_type=request.form.get('noise_type') or None,
+                noise_value=request.form.get('noise_value'),
+                ground_truth=[f for f in ground_truth_raw if f and f.filename]
+            )
 
         return render_template('result.html', result=data)
 
@@ -35,19 +46,30 @@ def pidinet():
 def hed():
     if request.method == 'POST':
 
-        file_list = request.files.getlist('file') or []
-        ground_truth_raw = request.files.getlist('ground_truth') or []
+        is_bsds = request.form.get('use_bsds500') is not None
 
-        if not file_list:
-            return "No input files uploaded", 400
+        if is_bsds:
+            data = edge_detection(
+                use_bsds=True,
+                method='HED',
+                noise_type=request.form.get('noise_type') or None,
+                noise_value=request.form.get('noise_value'),
+                ground_truth=request.form.get('calculate_metrics') is not None
+            )
+        else:
+            file_list = request.files.getlist('file') or []
+            ground_truth_raw = request.files.getlist('ground_truth') or []
 
-        data = edge_detection(
-            imgs=file_list,
-            method='HED',
-            noise_type = request.form.get('noise_type') or None,
-            noise_value = request.form.get('noise_value'),
-            ground_truth = [f for f in ground_truth_raw if f and f.filename]
-        )
+            if not file_list:
+                return "No input files uploaded", 400
+
+            data = edge_detection(
+                imgs=file_list,
+                method='HED',
+                noise_type = request.form.get('noise_type') or None,
+                noise_value = request.form.get('noise_value'),
+                ground_truth = [f for f in ground_truth_raw if f and f.filename]
+            )
 
         return render_template('result.html', result=data)
 
@@ -57,19 +79,32 @@ def hed():
 def methods_comparison():
     if request.method == 'POST':
 
-        file_list = request.files.getlist('file') or []
-        ground_truth_raw = request.files.getlist('ground_truth') or []
+        is_bsds = request.form.get('use_bsds500') is not None
 
-        if not file_list:
-            return "No input files uploaded", 400
+        if is_bsds:
+            data = comparison(
+                imgs = None,
+                use_bsds=True,
+                method='Comparison',
+                noise_type=request.form.get('noise_type') or None,
+                noise_value=request.form.get('noise_value'),
+                ground_truth=request.form.get('calculate_metrics') is not None
+            )
 
-        data = comparison(
-            imgs=file_list,
-            method='Comparison',
-            noise_type = request.form.get('noise_type') or None,
-            noise_value = request.form.get('noise_value'),
-            ground_truth = [f for f in ground_truth_raw if f and f.filename]
-        )
+        else:
+            file_list = request.files.getlist('file') or []
+            ground_truth_raw = request.files.getlist('ground_truth') or []
+
+            if not file_list:
+                return "No input files uploaded", 400
+
+            data = comparison(
+                imgs=file_list,
+                method='Comparison',
+                noise_type = request.form.get('noise_type') or None,
+                noise_value = request.form.get('noise_value'),
+                ground_truth = [f for f in ground_truth_raw if f and f.filename]
+            )
 
         return render_template('result.html', result=data)
 

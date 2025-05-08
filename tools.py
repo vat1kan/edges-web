@@ -1,3 +1,4 @@
+import os
 import cv2
 import base64
 import numpy as np
@@ -19,6 +20,12 @@ def image_to_base64(img_array):
     img.save(buffer, format="PNG")
     base64_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
     return base64_str
+
+def load_bsds_images(folder='./bsds500/images/'):
+    return [os.path.join(folder, fname) for fname in sorted(os.listdir(folder)) if fname.lower().endswith(('.jpg', '.png'))]
+
+def load_bsds_gts(folder='./bsds500/gts/'):
+    return [os.path.join(folder, fname) for fname in sorted(os.listdir(folder)) if fname.lower().endswith(('.jpg', '.png'))]
 
 def gauss(image, var=0.005):
     noisy_image = random_noise(image, mode='gaussian', var=var)
@@ -69,9 +76,14 @@ noise_functions = {
     'speckle': speckle
 }
 
-def edge_detection(imgs: list, method: str, noise_type: str, noise_value: float, ground_truth: list):
+def edge_detection(imgs=None, use_bsds=False, method=None, noise_type=None, noise_value=None, ground_truth=None):
     try:
         result = []
+
+        if use_bsds:
+            imgs = load_bsds_images()
+            if ground_truth:
+                ground_truth = load_bsds_gts()
 
         for idx, img_file in enumerate(imgs):
             img = image_reader(img_file)
@@ -105,13 +117,17 @@ def edge_detection(imgs: list, method: str, noise_type: str, noise_value: float,
             })
 
         return result
-
     except Exception as e:
         print(f"Error in edge_detection: {e}")
 
-def comparison(imgs: list, method: str, noise_type: str, noise_value: float, ground_truth: list):
+def comparison(imgs: list, use_bsds:bool, method: str, noise_type: str, noise_value: float, ground_truth: list):
     try:
         result = []
+
+        if use_bsds:
+            imgs = load_bsds_images()
+            if ground_truth:
+                ground_truth = load_bsds_gts()
 
         for idx, img_file in enumerate(imgs):
             img = image_reader(img_file)
