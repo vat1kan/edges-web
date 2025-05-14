@@ -21,7 +21,7 @@ def image_to_base64(img_array):
     base64_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
     return base64_str
 
-def load_bsds_images(folder='./bsds500/images/'):
+def load_bsds_images(folder='./bsds500/imgs/'):
     return [os.path.join(folder, fname) for fname in sorted(os.listdir(folder)) if fname.lower().endswith(('.jpg', '.png'))]
 
 def load_bsds_gts(folder='./bsds500/gts/'):
