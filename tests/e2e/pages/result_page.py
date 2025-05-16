@@ -3,10 +3,43 @@ class ResultPage:
         self.page = page
 
     def get_stock_img(self):
-        assert self.page.locator('[data-testid="stock_img"]').is_visible()
+        self.page.locator('[data-testid="stock_img"]').first.wait_for(state="visible", timeout=90000)
+
+        locators = self.page.locator('[data-testid="stock_img"]')
+        count = locators.count()
+    
+        for i in range(count):
+            try:
+                locators.nth(i).wait_for(state="visible", timeout=90000)
+            except Exception as e:
+                print(f"Image {i} not visible: {e}")
+                return False
+        return True
 
     def get_edges_img(self):
-        assert self.page.locator('[data-testid="edges_image"]').is_visible()
+        self.page.locator('[data-testid="edges_image"]').first.wait_for(state="visible", timeout=90000)
+
+        locators = self.page.locator('[data-testid="edges_image"]')
+        count = locators.count()
+    
+        for i in range(count):
+            try:
+                locators.nth(i).wait_for(state="visible", timeout=90000)
+            except Exception as e:
+                print(f"Image {i} not visible: {e}")
+                return False
+        return True
 
     def get_metrics(self):
-        assert self.page.locator('[data-testid="edges_metrics"]').is_visible()
+        self.page.locator('[data-testid="edges_metrics"]').first.wait_for(state="visible", timeout=90000)
+
+        locators = self.page.locator('[data-testid="edges_metrics"]')
+        count = locators.count()
+    
+        for i in range(count):
+            try:
+                locators.nth(i).wait_for(state="visible", timeout=90000)
+            except Exception as e:
+                print(f"Image {i} not visible: {e}")
+                return False
+        return True

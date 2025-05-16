@@ -10,6 +10,10 @@ from pidinet.getEdges import PiDiNet
 from skimage.util import random_noise
 from sklearn.metrics import precision_score, recall_score, f1_score
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+IMGS_FOLDER = os.path.join(BASE_DIR, 'bsds500', 'imgs')
+GTS_FOLDER = os.path.join(BASE_DIR, 'bsds500', 'gts')
+
 def image_reader(file):
     img = Image.open(file).convert('RGB')
     return np.array(img)
@@ -21,11 +25,19 @@ def image_to_base64(img_array):
     base64_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
     return base64_str
 
-def load_bsds_images(folder='./bsds500/imgs/'):
-    return [os.path.join(folder, fname) for fname in sorted(os.listdir(folder)) if fname.lower().endswith(('.jpg', '.png'))]
+def load_bsds_images(folder=IMGS_FOLDER):
+    return [
+        os.path.join(folder, fname)
+        for fname in sorted(os.listdir(folder))
+        if fname.lower().endswith(('.jpg', '.png'))
+    ]
 
-def load_bsds_gts(folder='./bsds500/gts/'):
-    return [os.path.join(folder, fname) for fname in sorted(os.listdir(folder)) if fname.lower().endswith(('.jpg', '.png'))]
+def load_bsds_gts(folder=GTS_FOLDER):
+    return [
+        os.path.join(folder, fname)
+        for fname in sorted(os.listdir(folder))
+        if fname.lower().endswith(('.jpg', '.png'))
+    ]
 
 def gauss(image, var=0.005):
     noisy_image = random_noise(image, mode='gaussian', var=var)
