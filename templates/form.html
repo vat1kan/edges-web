@@ -10,14 +10,14 @@
                 <div class="switch-container">
                     <span>Upload Images</span>
                     <label class="switch">
-                        <input type="checkbox" id="toggle-switch" name = "use_bsds500" data-testid="use_bsds500">
-                        <span class="slider"></span>
+                        <input type="checkbox" id="toggle-switch" name = "use_bsds500">
+                        <span class="slider" data-testid="use_bsds500"></span>
                     </label>
                     <span title = "Using prepared data set for edges detection">Use BSDS500</span>
                 </div>
             </div>
             <div id="uploadBlock">
-                <input id="fileInput" type="file" name="file" aria-label="file example" class="form-control" accept=".jpg, .jpeg, .png" data-testid="fileUpload" required>
+                <input id="fileInput" type="file" name="file" aria-label="file example" class="form-control" accept=".jpg, .jpeg, .png" data-testid="fileUpload" required multiple>
             </div>
         </div>
     </div>

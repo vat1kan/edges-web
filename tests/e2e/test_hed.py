@@ -1,60 +1,60 @@
 from pages.form_page import FormPage
 from pages.result_page import ResultPage
 
-def uploading_imgs(page):
+def test_uploading_imgs(page, hed_config):
 
     form_page = FormPage(page)
     result_page = ResultPage(page)
     
-    form_page.goto('/hed')
-    form_page.upload_files('../../bsds500/imgs/1.jpg')
+    form_page.goto(hed_config["url"])
+    form_page.upload_files(hed_config["img_path"])
     form_page.submit()
     
-    assert result_page.get_stock_img() == True
-    assert result_page.get_edges_img() == True
+    assert result_page.get_stock_img() is True
+    assert result_page.get_edges_img() is True
 
 
-def noised_imgs(page):
+def test_noised_imgs(page, hed_config):
 
     form_page = FormPage(page)
     result_page = ResultPage(page)
     
-    form_page.goto('/hed')
+    form_page.goto(hed_config["url"])
     form_page.use_bsds500()
-    form_page.add_noise('impulse',0.03)
+    form_page.add_noise('impulse', str(0.03))
     form_page.submit()
     
-    assert result_page.get_stock_img() == True
-    assert result_page.get_edges_img() == True
+    assert result_page.get_stock_img() is True
+    assert result_page.get_edges_img() is True
 
 
-def calculate_metrics(page):
+def test_calculate_metrics(page, hed_config):
 
     form_page = FormPage(page)
     result_page = ResultPage(page)
     
-    form_page.goto('/hed')
+    form_page.goto(hed_config["url"])
     form_page.use_bsds500()
     form_page.get_metrics()
     form_page.submit()
     
-    assert result_page.get_stock_img() == True
-    assert result_page.get_edges_img() == True
-    assert result_page.get_metrics() == True
+    assert result_page.get_stock_img() is True
+    assert result_page.get_edges_img() is True
+    assert result_page.get_metrics() is True
 
-def gt_uploading(page):
+def test_gt_uploading(page, hed_config):
 
     form_page = FormPage(page)
     result_page = ResultPage(page)
     
-    form_page.goto('/hed')
-    form_page.upload_files('../../bsds500/imgs/1.jpg')
+    form_page.goto(hed_config["url"])
+    form_page.upload_files(hed_config["img_path"])
     form_page.get_metrics()
-    form_page.upload_gt('../.../bsds500/gts/gt1.jpg')
+    form_page.upload_gt(hed_config["gt_path"])
     form_page.submit()
     
-    assert result_page.get_stock_img() == True
-    assert result_page.get_edges_img() == True
-    assert result_page.get_metrics() == True
+    assert result_page.get_stock_img() is True
+    assert result_page.get_edges_img() is True
+    assert result_page.get_metrics() is True
 
 
