@@ -8,7 +8,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify PythonAnywhere
+      - name: Autodeploy
         run: |
           curl -X POST https://devedges.pythonanywhere.com/update \
                -H "Authorization: Bearer ${{ secrets.DEV_DEPLOY_TOKEN }}"
+
+      - name: Dev Reload
+        run: |
+          curl -X POST "https://www.pythonanywhere.com/api/v0/user/devedges/webapps/devedges.pythonanywhere.com/reload/" \
+               -H "Authorization: Token ${{ secrets.DEV_API_TOKEN }}"
