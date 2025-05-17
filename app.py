@@ -1,5 +1,6 @@
+import os
 import traceback
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort
 from tools import edge_detection, comparison
 
 app = Flask(__name__)
@@ -122,6 +123,17 @@ def handle_exception(e):
     tb = traceback.format_exc()
     message = {'traceback': tb}
     return render_template('traceback.html', traceback=message['traceback']), 500
+
+@app.route("/update", methods=["POST"])
+def update():
+    expected_token = os.environ.get("DEPLOY_TOKEN")
+    received_token = request.headers.get("Authorization", "").replace("Bearer ", "")
+
+    if received_token != expected_token:
+        abort(401, "Unauthorized")
+
+    os.system("cd /home/devedges/edges-web && git pull origin dev")
+    return "Updated!", 200
 
 if __name__ == '__main__':
     app.run(debug=True)
