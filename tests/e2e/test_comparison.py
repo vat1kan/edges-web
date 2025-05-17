@@ -1,7 +1,7 @@
 from pages.form_page import FormPage
 from pages.result_page import ResultPage
 
-page_url = "/hed"
+page_url = "/comparison"
 
 def test_uploading_imgs(page, config):
 
@@ -13,7 +13,7 @@ def test_uploading_imgs(page, config):
     form_page.submit()
     
     assert result_page.get_stock_img() is True
-    assert result_page.get_edges_img() is True
+    assert result_page.get_edges_comparison() is True
 
 
 def test_noised_imgs(page, config):
@@ -27,7 +27,7 @@ def test_noised_imgs(page, config):
     form_page.submit()
     
     assert result_page.get_stock_img() is True
-    assert result_page.get_edges_img() is True
+    assert result_page.get_edges_comparison() is True
 
 
 def test_calculate_metrics(page, config):
@@ -41,8 +41,8 @@ def test_calculate_metrics(page, config):
     form_page.submit()
     
     assert result_page.get_stock_img() is True
-    assert result_page.get_edges_img() is True
-    assert result_page.get_metrics() is True
+    assert result_page.get_edges_comparison() is True
+    assert result_page.get_metrics_comparison() is True
 
 def test_gt_uploading(page, config):
 
@@ -56,8 +56,8 @@ def test_gt_uploading(page, config):
     form_page.submit()
     
     assert result_page.get_stock_img() is True
-    assert result_page.get_edges_img() is True
-    assert result_page.get_metrics() is True
+    assert result_page.get_edges_comparison() is True
+    assert result_page.get_metrics_comparison() is True
 
 def test_upload_counter_validation(page, config):
     form_page = FormPage(page)

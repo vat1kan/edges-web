@@ -1,7 +1,7 @@
 from pages.form_page import FormPage
 from pages.result_page import ResultPage
 
-page_url = "/hed"
+page_url = "/pidinet"
 
 def test_uploading_imgs(page, config):
 

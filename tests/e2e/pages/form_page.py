@@ -3,45 +3,55 @@ import os
 class FormPage:
     def __init__(self, page):
         self.page = page
+        self.page.on("dialog", self._handle_dialog)
 
-    def goto(self, url):
-        print("goto")
+    def _handle_dialog(self, dialog):
+        print(f"[ALERT] {dialog.message}")
+
+    def goto(self, url: str):
+        print("→ Navigating to page...")
         self.page.goto(url)
         self.page.wait_for_load_state('networkidle')
 
-    def upload_files(self, path):
-        print("files uploading")
-        files_path = os.path.abspath(path)
+    def upload_files(self, folder_path: str):
+        print("↑ Uploading input images...")
+        file_paths = self._get_files(folder_path)
         self.page.wait_for_selector('[data-testid="fileUpload"]')
-        self.page.set_input_files('[data-testid="fileUpload"]', read_files(files_path))
+        self.page.set_input_files('[data-testid="fileUpload"]', file_paths)
+
+    def upload_gt(self, folder_path: str):
+        print("↑ Uploading ground truth images...")
+        file_paths = self._get_files(folder_path)
+        self.page.wait_for_selector('[data-testid="upload_gt"]')
+        self.page.set_input_files('[data-testid="upload_gt"]', file_paths)
 
     def use_bsds500(self):
-        print("using bsds500")
+        print("✓ Using BSDS500 preset")
         self.page.click('[data-testid="use_bsds500"]')
 
-    def add_noise(self, type, value):
-        print("add noise")
+    def add_noise(self, noise_type: str, value: any):
+        print(f"+ Adding noise: {noise_type} = {value}")
         self.page.click('[data-testid="noise_check"]')
-        self.page.select_option('[data-testid="noise_type"]', type)
-        self.page.fill('[data-testid="noise_value"]', value)
+        self.page.select_option('[data-testid="noise_type"]', noise_type)
+        self.page.fill('[data-testid="noise_value"]', str(value))
 
     def get_metrics(self):
-        print("get metrics")
+        print("✓ Enabling metrics collection")
         self.page.click('[data-testid="metrics_checkbox"]')
 
-    def upload_gt(self, path):
-        print("upload gt")
-        gts_path = os.path.abspath(path)
-        self.page.wait_for_selector('[data-testid="upload_gt"]')
-        self.page.set_input_files('[data-testid="upload_gt"]', read_files(gts_path))
-
     def submit(self):
-        print("Clicking submit")
+        print("→ Submitting form")
         self.page.click('[data-testid="submit_btn"]', no_wait_after=True)
 
-def read_files(folder_path):
-    return [
-        os.path.abspath(os.path.join(folder_path, f))
-        for f in os.listdir(folder_path)
-        if os.path.isfile(os.path.join(folder_path, f))
-    ]
+    @staticmethod
+    def _get_files(path: str) -> list[str]:
+        abs_path = os.path.abspath(path)
+
+        if os.path.isfile(abs_path):
+            return [abs_path]
+
+        return [
+            os.path.join(abs_path, f)
+            for f in os.listdir(abs_path)
+            if os.path.isfile(os.path.join(abs_path, f))
+        ]
