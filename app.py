@@ -100,6 +100,7 @@ def methods_comparison():
 
             data = comparison(
                 imgs=file_list,
+                use_bsds=False,
                 method='Comparison',
                 noise_type = request.form.get('noise_type') or None,
                 noise_value = request.form.get('noise_value'),
