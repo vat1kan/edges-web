@@ -1,0 +1,6 @@
+pytest==8.3.5
+playwright==1.35.0
+pytest-playwright
+pytest-asyncio
+pytest-timeout
+requests
