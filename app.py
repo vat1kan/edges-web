@@ -133,7 +133,16 @@ def update():
         abort(401, "Unauthorized")
 
     os.system("cd /home/devedges/edges-web && git pull origin dev")
+
+    wsgi_file = "/var/www/devedges_pythonanywhere_com_wsgi.py"
+    try:
+        os.utime(wsgi_file, None)
+    except Exception as e:
+        return f"Failed to touch wsgi file: {e}", 500
+    
     return "Updated!", 200
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
