@@ -1,0 +1,19 @@
+name: Prod Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Autodeploy
+        run: |
+          curl -X POST https://webedges.pythonanywhere.com/update \
+               -H "Authorization: Bearer ${{ secrets.PROD_DEPLOY_TOKEN }}"
+
+      - name: Prod Reload
+        run: |
+          curl -X POST "https://www.pythonanywhere.com/api/v0/user/webedges/webapps/webedges.pythonanywhere.com/reload/" \
+               -H "Authorization: Token ${{ secrets.PROD_API_TOKEN }}"

@@ -132,17 +132,18 @@ def update():
     if received_token != expected_token:
         abort(401, "Unauthorized")
 
-    os.system("cd /home/devedges/edges-web && git pull origin dev")
+    repo_path = os.environ.get("REPO_PATH")
+    branch = os.environ.get("BRANCH")
+    wsgi_file = os.environ.get("WSGI_FILE")
 
-    wsgi_file = "/var/www/devedges_pythonanywhere_com_wsgi.py"
+    os.system(f"cd {repo_path} && git pull origin {branch}")
+
     try:
         os.utime(wsgi_file, None)
     except Exception as e:
         return f"Failed to touch wsgi file: {e}", 500
     
     return "Updated!", 200
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
